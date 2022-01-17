@@ -1,2 +1,2 @@
-# cmu-deeplearning
-Introduction to Deep Learning
+# 11-785 Introduction to Deep Learning
+Introduction to Deep Learning @ CMU
