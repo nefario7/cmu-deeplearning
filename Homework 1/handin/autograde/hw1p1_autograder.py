@@ -11,6 +11,7 @@ from mytorch.nn import Linear
 from mytorch.nn import BatchNorm1d
 from mytorch.optim import SGD
 from mytorch.models import MLP0, MLP1, MLP4
+from hw1p1_autograder_flags import *
 
 import numpy as np
 np.set_printoptions(
@@ -18,6 +19,10 @@ np.set_printoptions(
     precision = 4)
 
 import json
+
+
+autograder_version = '2.0.0'
+print("Autograder version: "+str(autograder_version))
 
 """
 ────────────────────────────────────────────────────────────────────────────────────
@@ -31,7 +36,7 @@ import json
 ────────────────────────────────────────────────────────────────────────────────────
 """
 
-DEBUG_AND_GRADE_IDENTITY = True
+DEBUG_AND_GRADE_IDENTITY = DEBUG_AND_GRADE_IDENTITY_flag
 
 if DEBUG_AND_GRADE_IDENTITY:
 
@@ -95,7 +100,7 @@ else:
 ────────────────────────────────────────────────────────────────────────────────────
 """
 
-DEBUG_AND_GRADE_SIGMOID = True
+DEBUG_AND_GRADE_SIGMOID = DEBUG_AND_GRADE_SIGMOID_flag
 
 if DEBUG_AND_GRADE_SIGMOID:
 
@@ -133,6 +138,10 @@ if DEBUG_AND_GRADE_SIGMOID:
         [0.25  , 0.1966],
         [0.105 , 0.0452]], dtype="f")
 
+    print("\nA =\n", A_solution, sep="")
+
+    print("\ndAdZ =\n", dAdZ_solution, sep="")
+
     print("\n──────────────────────────────────────────")
     print("SIGMOID | TEST RESULTS")
     print("──────────────────────────────────────────")
@@ -156,7 +165,7 @@ else:
 ────────────────────────────────────────────────────────────────────────────────────
 """
 
-DEBUG_AND_GRADE_TANH = True
+DEBUG_AND_GRADE_TANH = DEBUG_AND_GRADE_TANH_flag
 
 if DEBUG_AND_GRADE_TANH:
 
@@ -220,7 +229,7 @@ else:
 ────────────────────────────────────────────────────────────────────────────────────
 """
 
-DEBUG_AND_GRADE_RELU = True
+DEBUG_AND_GRADE_RELU = DEBUG_AND_GRADE_RELU_flag
 
 if DEBUG_AND_GRADE_RELU:
 
@@ -236,7 +245,7 @@ if DEBUG_AND_GRADE_RELU:
 
     relu = ReLU()
 
-    A = relu.forward(Z)
+    A = relu.forward(Z).copy()
     print("A =\n", A, sep="")
 
     dAdZ = relu.backward()
@@ -290,7 +299,7 @@ else:
 ────────────────────────────────────────────────────────────────────────────────────
 """
 
-DEBUG_AND_GRADE_MSELOSS = True
+DEBUG_AND_GRADE_MSELOSS = DEBUG_AND_GRADE_MSELOSS_flag
 
 if DEBUG_AND_GRADE_MSELOSS:
 
@@ -322,7 +331,7 @@ if DEBUG_AND_GRADE_MSELOSS:
     print("MSELOSS | SOLUTION OUTPUT\n")
     print("──────────────────────────────────────────")
 
-    L_solution = np.array(1.625, dtype="f")
+    L_solution = np.array(6.5, dtype="f")
 
     dLdA_solution = np.array([
         [-4., -4.],
@@ -330,8 +339,8 @@ if DEBUG_AND_GRADE_MSELOSS:
         [-1.,  1.],
         [ 2.,  2.]], dtype="f")
 
-    print("\nL =\n", L.round(4), "\n", sep="")
-    print("\ndLdA =\n", dLdA, "\n", sep="")
+    print("\nL =\n", L_solution, "\n", sep="")
+    print("\ndLdA =\n", dLdA_solution, "\n", sep="")
 
     print("\n──────────────────────────────────────────")
     print("MSELOSS | TEST RESULTS")
@@ -356,7 +365,7 @@ else:
 ────────────────────────────────────────────────────────────────────────────────────
 """
 
-DEBUG_AND_GRADE_CROSSENTROPYLOSS = True
+DEBUG_AND_GRADE_CROSSENTROPYLOSS = DEBUG_AND_GRADE_CROSSENTROPYLOSS_flag
 
 if DEBUG_AND_GRADE_CROSSENTROPYLOSS:
 
@@ -396,6 +405,10 @@ if DEBUG_AND_GRADE_CROSSENTROPYLOSS:
         [-0.7311,  0.7311],
         [ 0.2689, -0.2689]], dtype="f")
 
+    print("\nL =\n", L_solution, sep="")
+
+    print("\ndLdA =\n", dLdA_solution, sep="")
+
     print("\n──────────────────────────────────────────")
     print("CROSSENTROPYLOSS | TEST RESULTS")
     print("──────────────────────────────────────────")
@@ -419,7 +432,7 @@ else:
 ────────────────────────────────────────────────────────────────────────────────────
 """
 
-DEBUG_AND_GRADE_LINEAR = True
+DEBUG_AND_GRADE_LINEAR = DEBUG_AND_GRADE_LINEAR_flag
 
 if DEBUG_AND_GRADE_LINEAR:
 
@@ -575,7 +588,7 @@ else:
 ────────────────────────────────────────────────────────────────────────────────────
 """
 
-DEBUG_AND_GRADE_SGD = True
+DEBUG_AND_GRADE_SGD = DEBUG_AND_GRADE_SGD_flag
 
 if DEBUG_AND_GRADE_SGD:
 
@@ -610,8 +623,8 @@ if DEBUG_AND_GRADE_SGD:
 
     print("Parameters After SGD (Step=1)\n")
 
-    W_1 = pseudo_model.layers[0].W
-    b_1 = pseudo_model.layers[0].b
+    W_1 = pseudo_model.layers[0].W.copy()
+    b_1 = pseudo_model.layers[0].b.copy()
     print("W =\n", W_1, "\n", sep="")
     print("b =\n", b_1, "\n", sep="")
 
@@ -695,7 +708,7 @@ else:
 ────────────────────────────────────────────────────────────────────────────────────
 """
 
-DEBUG_AND_GRADE_MLP0 = True
+DEBUG_AND_GRADE_MLP0 = DEBUG_AND_GRADE_MLP0_flag
 
 if DEBUG_AND_GRADE_MLP0:
 
@@ -841,7 +854,7 @@ else:
 
 """## MPL1"""
 
-DEBUG_AND_GRADE_MLP1 = True
+DEBUG_AND_GRADE_MLP1 = DEBUG_AND_GRADE_MLP1_flag
 
 if DEBUG_AND_GRADE_MLP1:
 
@@ -1071,7 +1084,7 @@ else:
 ────────────────────────────────────────────────────────────────────────────────────
 """
 
-DEBUG_AND_GRADE_MLP4 = True
+DEBUG_AND_GRADE_MLP4 = DEBUG_AND_GRADE_MLP4_flag
 
 if DEBUG_AND_GRADE_MLP4:
 
@@ -1692,7 +1705,7 @@ else:
 ────────────────────────────────────────────────────────────────────────────────────
 """
 
-DEBUG_AND_GRADE_BATCHNORM = True
+DEBUG_AND_GRADE_BATCHNORM = DEBUG_AND_GRADE_BATCHNORM_flag
 
 if DEBUG_AND_GRADE_BATCHNORM:
 

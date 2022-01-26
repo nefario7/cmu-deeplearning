@@ -8,9 +8,9 @@ class BatchNorm1d:
         self.alpha     = alpha
         self.eps       = 1e-8
         
-        self.Z         = None # TODO
-        self.NZ        = None # TODO
-        self.BZ        = None # TODO
+        self.Z         = None
+        self.NZ        = None
+        self.BZ        = None
 
         self.BW        = np.ones((1, num_features))
         self.Bb        = np.zeros((1, num_features))
