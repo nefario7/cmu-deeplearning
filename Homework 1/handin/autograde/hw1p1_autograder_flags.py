@@ -14,7 +14,7 @@ DEBUG_AND_GRADE_CROSSENTROPYLOSS_flag = True
 
 # flags for linear.py
 
-DEBUG_AND_GRADE_LINEAR_flag = False
+DEBUG_AND_GRADE_LINEAR_flag = True
 
 # flags for optim.py
 
