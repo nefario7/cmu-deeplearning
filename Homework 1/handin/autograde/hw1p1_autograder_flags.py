@@ -18,7 +18,7 @@ DEBUG_AND_GRADE_LINEAR_flag = True
 
 # flags for optim.py
 
-DEBUG_AND_GRADE_SGD_flag = False
+DEBUG_AND_GRADE_SGD_flag = True
 
 # flags for hw1.py
 
