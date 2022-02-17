@@ -3,6 +3,7 @@
 
 import numpy as np
 
+
 class Dropout(object):
     def __init__(self, p=0.5):
         self.p = p
@@ -11,18 +12,16 @@ class Dropout(object):
         return self.forward(x)
 
     def forward(self, x, train=True):
-
         if train:
             # TODO: Generate mask and apply to x
+            self.mask = np.random.rand(x.shape[0], x.shape[1])
+            self.mask = self.mask < p
+            x = np.multiply(x, self.mask)
+            x = x / p
 
-            raise NotImplementedError("Dropout Forward (Train) Not Implemented")
-            
-        else:
-            # TODO: Return x as is
+        return x
 
-            raise NotImplementedError("Dropout Forward (Inference) Not Implemented")
-		
     def backward(self, delta):
         # TODO: Multiply mask with delta and return
-
+        return np.multiply(delta, self.mask)
         raise NotImplementedError("Dropout Backward Not Implemented")
