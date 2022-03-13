@@ -338,8 +338,8 @@ class Flatten:
         Return:
             Z (np.array): (batch_size, in_channels * in width)
         """
-        self.original_shape = self.A.shape
-        Z = A.flatten()  # TODO
+        self.original_shape = A.shape
+        Z = A.reshape(1, -1)  # TODO
 
         return Z
 

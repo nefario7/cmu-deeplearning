@@ -5,11 +5,12 @@ import numpy as np
 import os
 import sys
 
-sys.path.append('mytorch')
+sys.path.append("mytorch")
 from loss import *
 from activation import *
 from linear import *
 from conv import *
+
 
 class CNN(object):
 
@@ -21,9 +22,21 @@ class CNN(object):
     The returned model architecture should be same as in Section 3.3 Figure 3
     """
 
-    def __init__(self, input_width, num_input_channels, num_channels, kernel_sizes, strides,
-                 num_linear_neurons, activations, conv_weight_init_fn, bias_init_fn,
-                 linear_weight_init_fn, criterion, lr):
+    def __init__(
+        self,
+        input_width,
+        num_input_channels,
+        num_channels,
+        kernel_sizes,
+        strides,
+        num_linear_neurons,
+        activations,
+        conv_weight_init_fn,
+        bias_init_fn,
+        linear_weight_init_fn,
+        criterion,
+        lr,
+    ):
         """
         input_width           : int    : The width of the input to the first convolutional layer
         num_input_channels    : int    : Number of channels for the input layer
@@ -61,10 +74,18 @@ class CNN(object):
         # self.linear_layer         (Linear)      = Linear(???)
         # <---------------------
 
-        self.convolutional_layers = None
-        self.flatten = None
-        self.linear_layer = None
+        self.convolutional_layers = []
+        in_channels = num_input_channels
+        out_width = input_width
+        for i in range(self.nlayers):
+            self.convolutional_layers.append(
+                Conv1d(in_channels, num_channels[i], kernel_sizes[i], strides[i], conv_weight_init_fn, bias_init_fn)
+            )
+            in_channels = num_channels[i]
+            out_width = (out_width - kernel_sizes[i]) // strides[i] + 1
 
+        self.flatten = Flatten()
+        self.linear_layer = Linear(num_channels[-1] * out_width, num_linear_neurons)
 
     def forward(self, A):
         """
@@ -80,6 +101,11 @@ class CNN(object):
 
         # Save output (necessary for error and loss)
         self.Z = A
+        for i in range(self.nlayers):
+            self.Z = self.convolutional_layers[i].forward(self.Z)
+            self.Z = self.activations[i].forward(self.Z)
+        self.Z = self.flatten.forward(self.Z)
+        self.Z = self.linear_layer.forward(self.Z)
 
         return self.Z
 
@@ -98,9 +124,13 @@ class CNN(object):
         ## Your code goes here -->
         # Iterate through each layer in reverse order
         # <---------------------
+        grad = self.linear_layer.backward(grad)
+        grad = self.flatten.backward(grad)
+        for i in range(self.nlayers):
+            k = self.nlayers - i - 1
+            grad = self.convolutional_layers[k].backward(grad * self.activations[k].backward())
 
         return grad
-
 
     def zero_grads(self):
         # Do not modify this method
@@ -114,13 +144,15 @@ class CNN(object):
     def step(self):
         # Do not modify this method
         for i in range(self.nlayers):
-            self.convolutional_layers[i].conv1d_stride1.W = (self.convolutional_layers[i].conv1d_stride1.W -
-                                              self.lr * self.convolutional_layers[i].conv1d_stride1.dLdW)
-            self.convolutional_layers[i].conv1d_stride1.b = (self.convolutional_layers[i].conv1d_stride1.b -
-                                  self.lr * self.convolutional_layers[i].conv1d_stride1.dLdb)
+            self.convolutional_layers[i].conv1d_stride1.W = (
+                self.convolutional_layers[i].conv1d_stride1.W - self.lr * self.convolutional_layers[i].conv1d_stride1.dLdW
+            )
+            self.convolutional_layers[i].conv1d_stride1.b = (
+                self.convolutional_layers[i].conv1d_stride1.b - self.lr * self.convolutional_layers[i].conv1d_stride1.dLdb
+            )
 
-        self.linear_layer.W = (self.linear_layer.W - self.lr * self.linear_layer.dLdW)
-        self.linear_layer.b = (self.linear_layer.b -  self.lr * self.linear_layer.dLdb)
+        self.linear_layer.W = self.linear_layer.W - self.lr * self.linear_layer.dLdW
+        self.linear_layer.b = self.linear_layer.b - self.lr * self.linear_layer.dLdb
 
     def train(self):
         # Do not modify this method
