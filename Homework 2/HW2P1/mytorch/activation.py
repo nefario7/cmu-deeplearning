@@ -32,7 +32,8 @@ class Sigmoid:
 class Tanh:
     def forward(self, Z):
 
-        self.A = (np.exp(Z) - np.exp(-Z)) / (np.exp(Z) + np.exp(-Z))
+        # self.A = (np.exp(Z) - np.exp(-Z)) / (np.exp(Z) + np.exp(-Z))
+        self.A = np.tanh(Z)
 
         return self.A
 

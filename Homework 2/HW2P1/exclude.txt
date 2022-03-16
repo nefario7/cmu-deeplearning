@@ -2,3 +2,5 @@ mytorch/activation.pyc
 mytorch/batchnorm.pyc
 mytorch/linear.pyc
 mytorch/loss.pyc
+mytorch/__pycache__
+hw2/__pycache__

@@ -141,8 +141,6 @@ def test_downsampling_1d_correctness():
 
     try:
         for i in range(3):
-            print("Exp", expected_res["backward_res_list"][i].shape)
-            print("ep", ep_bres_arr[i].shape)
             assert expected_res["forward_res_list"][i].shape == ep_fres_arr[i].shape
             assert expected_res["backward_res_list"][i].shape == ep_bres_arr[i].shape
             assert np.allclose(expected_res["forward_res_list"][i], ep_fres_arr[i])
@@ -1403,7 +1401,7 @@ class CNN_model(nn.Module):
         self.conv3 = nn.Conv1d(28, 14, 2, 2)
 
         self.flatten = Flatten_()
-        self.fc = nn.Linear(14 * 30, self.out_size)
+        self.fc = nn.Linear(14 * 28, self.out_size)
 
     def forward(self, x):
         x = self.conv1(x)
