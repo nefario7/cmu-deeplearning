@@ -1,7 +1,7 @@
 import numpy as np
 
-class Upsample1d():
 
+class Upsample1d:
     def __init__(self, upsampling_factor):
         self.upsampling_factor = upsampling_factor
 
@@ -14,9 +14,12 @@ class Upsample1d():
             Z (np.array): (batch_size, in_channels, output_width)
         """
 
-        Z = None # TODO
+        b, c, w = A.shape
+        w_out = (w * self.upsampling_factor) - (self.upsampling_factor - 1)
+        Z = np.zeros((b, c, w_out), dtype=A.dtype)  # TODO
+        Z[:, :, :: self.upsampling_factor] = A
 
-        return NotImplemented
+        return Z
 
     def backward(self, dLdZ):
 
@@ -26,13 +29,13 @@ class Upsample1d():
         Return:
             dLdA (np.array): (batch_size, in_channels, input_width)
         """
-        
-        dLdA = None  #TODO
 
-        return NotImplemented
+        dLdA = dLdZ[:, :, :: self.upsampling_factor]  # TODO
 
-class Downsample1d():
+        return dLdA
 
+
+class Downsample1d:
     def __init__(self, downsampling_factor):
         self.downsampling_factor = downsampling_factor
 
@@ -45,9 +48,10 @@ class Downsample1d():
             Z (np.array): (batch_size, in_channels, output_width)
         """
 
-        Z = None # TODO
+        Z = A[:, :, :: self.downsampling_factor]  # TODO
+        self.original_width = A.shape[2]
 
-        return NotImplemented
+        return Z
 
     def backward(self, dLdZ):
 
@@ -57,13 +61,14 @@ class Downsample1d():
         Return:
             dLdA (np.array): (batch_size, in_channels, input_width)
         """
-        
-        dLdA = None  #TODO
+        b, c, w = dLdZ.shape
+        dLdA = np.zeros((b, c, self.original_width), dtype=dLdZ.dtype)  # TODO
+        dLdA[:, :, :: self.downsampling_factor] = dLdZ
 
-        return NotImplemented
+        return dLdA
 
-class Upsample2d():
 
+class Upsample2d:
     def __init__(self, upsampling_factor):
         self.upsampling_factor = upsampling_factor
 
@@ -76,9 +81,13 @@ class Upsample2d():
             Z (np.array): (batch_size, in_channels, output_width, output_height)
         """
 
-        Z = None # TODO
+        b, c, w, h = A.shape
+        w_out = (w * self.upsampling_factor) - (self.upsampling_factor - 1)
+        h_out = (h * self.upsampling_factor) - (self.upsampling_factor - 1)
+        Z = np.zeros((b, c, w_out, h_out), dtype=A.dtype)  # TODO
+        Z[:, :, :: self.upsampling_factor, :: self.upsampling_factor] = A
 
-        return NotImplemented
+        return Z
 
     def backward(self, dLdZ):
 
@@ -89,12 +98,12 @@ class Upsample2d():
             dLdA (np.array): (batch_size, in_channels, input_width, input_height)
         """
 
-        dLdA = None  #TODO
+        dLdA = dLdZ[:, :, :: self.upsampling_factor, :: self.upsampling_factor]  # TODO
 
-        return NotImplemented
+        return dLdA
 
-class Downsample2d():
 
+class Downsample2d:
     def __init__(self, downsampling_factor):
         self.downsampling_factor = downsampling_factor
 
@@ -107,9 +116,9 @@ class Downsample2d():
             Z (np.array): (batch_size, in_channels, output_width, output_height)
         """
 
-        Z = None # TODO
-
-        return NotImplemented
+        Z = A[:, :, :: self.downsampling_factor, :: self.downsampling_factor]  # TODO
+        self.original_shape = [A.shape[2], A.shape[3]]
+        return Z
 
     def backward(self, dLdZ):
 
@@ -119,7 +128,11 @@ class Downsample2d():
         Return:
             dLdA (np.array): (batch_size, in_channels, input_width, input_height)
         """
-        
-        dLdA = None  #TODO
 
-        return NotImplemented
+        b, c, w, h = dLdZ.shape
+        w_out = self.original_shape[0]
+        h_out = self.original_shape[1]
+        dLdA = np.zeros((b, c, w_out, h_out), dtype=dLdZ.dtype)  # TODO
+        dLdA[:, :, :: self.downsampling_factor, :: self.downsampling_factor] = dLdZ
+
+        return dLdA

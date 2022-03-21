@@ -2,66 +2,57 @@ import numpy as np
 
 
 class Identity:
-    
     def forward(self, Z):
-    
+
         self.A = Z
-        
+
         return self.A
-    
+
     def backward(self):
-    
+
         dAdZ = np.ones(self.A.shape, dtype="f")
-        
+
         return dAdZ
 
 
 class Sigmoid:
-    
     def forward(self, Z):
-    
-        self.A = 1.0/ (1 + np.exp(-Z))
+
+        self.A = 1.0 / (1 + np.exp(-Z))
+
         return self.A
-    
+
     def backward(self):
-    
-        dAdZ = self.A * (1 - self.A) # TODO
+
+        dAdZ = (1 - self.A) * self.A
+
         return dAdZ
-        #return NotImplemented
 
 
 class Tanh:
-    
     def forward(self, Z):
-    
-        self.A = (np.exp(Z) - np.exp(-Z)) / (np.exp(Z) + np.exp(-Z)) # TODO
+
+        # self.A = (np.exp(Z) - np.exp(-Z)) / (np.exp(Z) + np.exp(-Z))
+        self.A = np.tanh(Z)
+
         return self.A
 
-        #return NotImplemented
-    
     def backward(self):
-    
-        dAdZ = 1 - (self.A ** 2) # TODO
-        
+
+        dAdZ = 1 - np.power(self.A, 2)
+
         return dAdZ
 
 
 class ReLU:
-    
     def forward(self, Z):
-    
-        self.A = None # TODO
 
-        greater_than_zero = Z > 0
-        self.A = Z * greater_than_zero
+        self.A = Z * (Z > 0)
+
         return self.A
-        
-        return NotImplemented
-    
+
     def backward(self):
-    
-        dAdZ = ((self.A > 0.0) * 1.0) # TODO
-        
+
+        dAdZ = 1.0 * (self.A > 0)
+
         return dAdZ
-        
-        
