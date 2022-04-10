@@ -2,6 +2,7 @@
 # be available to AutoLab and are not needed (or allowed)
 import numpy as np
 
+
 class Activation(object):
 
     """
@@ -20,6 +21,7 @@ class Activation(object):
     def derivative(self):
         raise NotImplemented
 
+
 class Sigmoid(Activation):
 
     """
@@ -30,7 +32,7 @@ class Sigmoid(Activation):
         super(Sigmoid, self).__init__()
 
     def forward(self, x):
-        self.state = (1 / (1 + np.exp(-x)))
+        self.state = 1 / (1 + np.exp(-x))
         return self.state
 
     def derivative(self):
@@ -62,4 +64,3 @@ class Tanh(Activation):
             return 1 - (state**2)
         else:
             return 1 - (self.state**2)
-            

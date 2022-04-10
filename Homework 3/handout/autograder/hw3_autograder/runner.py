@@ -18,6 +18,8 @@ gru_test = GRUTest()
 ctc_test = CTCTest()
 search_test = SearchTest()
 
+print("Autograder - v1.1")
+
 test_list = {
     'mcq' : [
         {'title': 'Section 1a - Multiple Choice Questions',

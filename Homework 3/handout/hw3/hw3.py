@@ -18,17 +18,13 @@ class CharacterPredictor(object):
     def __init__(self, input_dim, hidden_dim, num_classes):
         super(CharacterPredictor, self).__init__()
         """The network consists of a GRU Cell and a linear layer."""
-        self.rnn = None # TODO
-        self.projection = None # TODO
+        self.rnn = GRUCell(input_dim, hidden_dim)  # TODO
+        self.projection = Linear(hidden_dim, num_classes)  # TODO
         self.projection.W = np.random.rand(num_classes, hidden_dim)
 
-    def init_rnn_weights(
-        self, Wrx, Wzx, Wnx, Wrh, Wzh, Wnh, brx, bzx, bnx, brh, bzh, bnh
-    ):
+    def init_rnn_weights(self, Wrx, Wzx, Wnx, Wrh, Wzh, Wnh, brx, bzx, bnx, brh, bzh, bnh):
         # DO NOT MODIFY
-        self.rnn.init_weights(
-            Wrx, Wzx, Wnx, Wrh, Wzh, Wnh, brx, bzx, bnx, brh, bzh, bnh
-        )
+        self.rnn.init_weights(Wrx, Wzx, Wnx, Wrh, Wzh, Wnh, brx, bzx, bnx, brh, bzh, bnh)
 
     def __call__(self, x, h):
         return self.forward(x, h)
@@ -45,7 +41,7 @@ class CharacterPredictor(object):
 
         h: (hidden_dim)
             hidden-state at previous time-step.
-        
+
         Returns
         -------
         logits: (num_classes)
@@ -55,13 +51,14 @@ class CharacterPredictor(object):
             hidden state at current time-step.
 
         """
-        hnext = None # TODO
+        hnext = self.rnn(x, h)  # TODO
         # self.projection expects input in the form of batch_size * input_dimension
         # Therefore, reshape the input of self.projection as (1,-1)
-        logits = None # TODO
-        # logits = logits.reshape(-1,) # uncomment once code implemented
-        # return logits, hnext
-        raise NotImplementedError
+        logits = self.projection(hnext.reshape(1, -1))  # TODO
+        logits = logits.reshape(
+            -1,
+        )
+        return logits, hnext
 
 
 def inference(net, inputs):
@@ -84,6 +81,13 @@ def inference(net, inputs):
             one per time step of input..
 
     """
-    
-    # This code should not take more than 10 lines. 
-    raise NotImplementedError
+    seq_len, feature_dim = inputs.shape
+    hidden_dim = net.rnn.h
+
+    hnext = np.zeros((hidden_dim))
+    logits = []
+    for t in range(seq_len):
+        l, hnext = net(inputs[t], hnext)
+        logits.append(l.copy())
+
+    return np.array(logits)

@@ -44,8 +44,8 @@ class BeamSearchToyTest(Test):
 
 
 		expected_MergedPathScores = {
-			'A':   np.array([0.165032]),
-			'AB':  np.array([0.125048]),
+			'A':   np.array([0.170575]),
+			'AB':  np.array([0.132704]),
 			'BAB': np.array([0.119944]),
 			'B':   np.array([0.107996]),
 			'BA':  np.array([0.086856]),
@@ -54,8 +54,7 @@ class BeamSearchToyTest(Test):
 		try:
 			assert list(MergedPathScores.keys()) == list(expected_MergedPathScores.keys())
 			for key in MergedPathScores.keys():
-				assert np.allclose(MergedPathScores[key], expected_MergedPathScores[key])
-			# assert MergedPathScores == expected_MergedPathScores
+				assert np.allclose(np.array(MergedPathScores[key]), expected_MergedPathScores[key])
 		except AssertionError:
 			print(f"Incorrect Merged Path Scores\nExpected: {expected_MergedPathScores}\nPredicted: {MergedPathScores}")
 			return False

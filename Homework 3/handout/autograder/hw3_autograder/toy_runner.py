@@ -16,6 +16,7 @@ gru_test = GRUToyTest()
 ctc_test = CTCToyTest()
 beam_search_test = BeamSearchToyTest()
 
+print("Toy Problem Autograder - v1.1")
 
 test_list = {
     'rnn': [

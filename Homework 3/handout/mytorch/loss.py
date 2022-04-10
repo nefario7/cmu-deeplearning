@@ -8,6 +8,7 @@ import os
 # of loss functions (which are in the form of classes so that they can be
 # exchanged easily (it's how PyTorch and other ML libraries do it))
 
+
 class Criterion(object):
     """
     Interface for loss functions.
@@ -28,6 +29,7 @@ class Criterion(object):
 
     def derivative(self):
         raise NotImplemented
+
 
 class SoftmaxCrossEntropy(Criterion):
     """
