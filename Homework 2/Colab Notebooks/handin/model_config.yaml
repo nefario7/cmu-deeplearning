@@ -1,0 +1,20 @@
+Experiment: ConvNext
+? ''
+: ConvNext
+backbone: convnext
+batch_size: 256
+dropout: null
+epochs: 50
+log: true
+loss: CrossEL
+optim:
+    lr: 0.1
+    momentum: 0.9
+    nesterov: true
+    weight_decay: 0.0001
+optimizer: SGD
+randomize: false
+save: true
+scheduler: ReduceLRonPlateau
+subset: false
+transforms: true
